@@ -9,26 +9,23 @@ int main()
 
     cantidad = cargarDatos(zonas);
 
-    do
+    int continuar = 1;
+
+    while(continuar)
     {
         menu();
 
         printf("\nSeleccione una opcion: ");
-        scanf("%d", &opcion);
-        getchar();
+        opcion = validarIntRango(1, 9);
 
         switch(opcion)
         {
             case 1:
-
                 registrarZona(zonas, &cantidad);
-
                 break;
 
             case 2:
-
                 mostrarZonas(zonas, cantidad);
-
                 break;
 
             case 3:
@@ -55,57 +52,44 @@ int main()
             }
 
             case 4:
-
                 calcularPromedio(zonas, cantidad);
-
                 break;
 
             case 5:
-
                 calcularPrediccion(zonas, cantidad);
-
                 break;
 
             case 6:
-
                 mostrarAlertas(zonas, cantidad);
-
                 break;
 
             case 7:
-
                 recomendaciones(zonas, cantidad);
-
                 break;
 
             case 8:
-
                 guardarDatos(zonas, cantidad);
-
                 break;
 
             case 9:
-
                 guardarDatos(zonas, cantidad);
-
                 printf("\nDatos guardados correctamente.\n");
                 printf("Gracias por utilizar el sistema.\n");
-
+                continuar = 0;
                 break;
 
             default:
-
                 printf("\nOpcion incorrecta.\n");
-
         }
 
-        if(opcion != 9)
+        if(continuar)
         {
-            printf("\nPresione ENTER para continuar...");
-            getchar();
+            printf("\nDesea realizar alguna cosa mas 1.Si 0.No ");
+            continuar = validarIntRango(0, 1);
         }
+    }
 
-    }while(opcion != 9);
-
+    return 0;
+}
     return 0;
 }
