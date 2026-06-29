@@ -23,7 +23,7 @@ typedef struct
 } Zona;
 
 
-/* VALIDACIONES */
+
 
 int validarLetras(char texto[]);
 int validarNumero(char texto[]);
@@ -32,31 +32,31 @@ void ingresarTexto(char mensaje[], char texto[]);
 float ingresarFloat(char mensaje[]);
 
 
-/* ARCHIVOS */
+
 
 void guardarDatos(Zona zonas[], int cantidad);
 int cargarDatos(Zona zonas[]);
 
 
-/* REGISTROS */
+
 
 void registrarZona(Zona zonas[], int *cantidad);
 void mostrarZonas(Zona zonas[], int cantidad);
 
 
-/* CALCULOS */
+
 
 float calcularContaminacion(Zona zona);
 void calcularPromedio(Zona zonas[], int cantidad);
 void calcularPrediccion(Zona zonas[], int cantidad);
 
 
-/* REPORTES */
+
 
 void mostrarAlertas(Zona zonas[], int cantidad);
 void recomendaciones(Zona zonas[], int cantidad);
 
 
-/* MENU */
+
 
 void menu();
