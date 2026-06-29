@@ -101,9 +101,6 @@ void ingresarTexto(char mensaje[], char texto[])
 }
 
 
-/*=========================
- INGRESAR FLOAT
-==========================*/
 
 float ingresarFloat(char mensaje[])
 {
