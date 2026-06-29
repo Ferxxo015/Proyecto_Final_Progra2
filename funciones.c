@@ -1,8 +1,5 @@
 #include "funciones.h"
 
-/*=========================
-        MENU
-==========================*/
 
 void menu()
 {
@@ -22,9 +19,7 @@ void menu()
 }
 
 
-/*=========================
-   VALIDAR SOLO LETRAS
-==========================*/
+
 
 int validarLetras(char texto[])
 {
@@ -52,9 +47,7 @@ int validarLetras(char texto[])
 }
 
 
-/*=========================
- VALIDAR SOLO NUMEROS
-==========================*/
+
 
 int validarNumero(char texto[])
 {
@@ -88,9 +81,6 @@ int validarNumero(char texto[])
 }
 
 
-/*=========================
- INGRESAR TEXTO
-==========================*/
 
 void ingresarTexto(char mensaje[], char texto[])
 {
@@ -138,9 +128,7 @@ float ingresarFloat(char mensaje[])
 }
 
 
-/*=========================
- GUARDAR DATOS
-==========================*/
+
 
 void guardarDatos(Zona zonas[], int cantidad)
 {
@@ -164,9 +152,7 @@ void guardarDatos(Zona zonas[], int cantidad)
 }
 
 
-/*=========================
- CARGAR DATOS
-==========================*/
+
 
 int cargarDatos(Zona zonas[])
 {
@@ -189,9 +175,7 @@ int cargarDatos(Zona zonas[])
 
     return cantidad;
 }
-/*=========================
-    REGISTRAR ZONA
-=========================*/
+
 
 void registrarZona(Zona zonas[], int *cantidad)
 {
@@ -223,9 +207,7 @@ void registrarZona(Zona zonas[], int *cantidad)
 }
 
 
-/*=========================
-    MOSTRAR ZONAS
-=========================*/
+
 
 void mostrarZonas(Zona zonas[], int cantidad)
 {
@@ -261,9 +243,7 @@ void mostrarZonas(Zona zonas[], int cantidad)
 }
 
 
-/*=========================
- CALCULAR CONTAMINACION
-=========================*/
+
 
 float calcularContaminacion(Zona zona)
 {
@@ -301,9 +281,7 @@ void calcularPromedio(Zona zonas[], int cantidad)
 }
 
 
-/*=========================
- CALCULAR PREDICCION
-=========================*/
+
 
 void calcularPrediccion(Zona zonas[], int cantidad)
 {
@@ -371,9 +349,7 @@ void mostrarAlertas(Zona zonas[], int cantidad)
 }
 
 
-/*=========================
-   RECOMENDACIONES
-=========================*/
+
 
 void recomendaciones(Zona zonas[], int cantidad)
 {
