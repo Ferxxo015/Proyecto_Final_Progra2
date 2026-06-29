@@ -1,6 +1,7 @@
 #include "funciones.h"
 
 
+
 void menu()
 {
     printf("\n=========================================\n");
@@ -21,109 +22,62 @@ void menu()
 
 
 
-int validarLetras(char texto[])
+void leerCadena(char *cadena, int n)
 {
-    int i = 0;
+    int len;
 
-    while(texto[i] != '\0')
-    {
-        if(texto[i] == '\n')
-        {
-            i++;
-            continue;
-        }
+    fgets(cadena, n, stdin);
 
-        if(!((texto[i] >= 'A' && texto[i] <= 'Z') ||
-             (texto[i] >= 'a' && texto[i] <= 'z') ||
-              texto[i] == ' '))
-        {
-            return 0;
-        }
-
-        i++;
-    }
-
-    return 1;
+    len = strlen(cadena) - 1;
+    if (len >= 0 && cadena[len] == '\n')
+        cadena[len] = '\0';
 }
 
 
 
 
-int validarNumero(char texto[])
+float validarFloatRango(float a, float b)
 {
-    int i = 0;
-    int punto = 0;
-
-    while(texto[i] != '\0')
-    {
-        if(texto[i] == '\n')
-        {
-            i++;
-            continue;
-        }
-
-        if(texto[i] == '.')
-        {
-            punto++;
-
-            if(punto > 1)
-                return 0;
-        }
-        else if(texto[i] < '0' || texto[i] > '9')
-        {
-            return 0;
-        }
-
-        i++;
-    }
-
-    return 1;
-}
-
-
-
-void ingresarTexto(char mensaje[], char texto[])
-{
-    do
-    {
-        printf("%s", mensaje);
-
-        fgets(texto,50,stdin);
-
-        texto[strcspn(texto,"\n")] = '\0';
-
-        if(!validarLetras(texto))
-        {
-            printf("\nSolo se permiten letras.\n\n");
-        }
-
-    }while(!validarLetras(texto));
-}
-
-
-
-float ingresarFloat(char mensaje[])
-{
-    char aux[30];
+    int aux;
+    float n;
 
     do
     {
-        printf("%s", mensaje);
+        aux = scanf("%f", &n);
+        while (getchar() != '\n');
 
-        fgets(aux,30,stdin);
-
-        aux[strcspn(aux,"\n")] = '\0';
-
-        if(!validarNumero(aux))
+        if (aux != 1 || n < a || n > b)
         {
-            printf("\nNumero invalido.\n\n");
+            printf("Error: valor ingresado incorrecto\n");
+            printf(">> ");
         }
+    } while (aux != 1 || n < a || n > b);
 
-    }while(!validarNumero(aux));
-
-    return atof(aux);
+    return n;
 }
 
+
+
+
+int validarIntRango(int a, int b)
+{
+    int aux;
+    int n;
+
+    do
+    {
+        aux = scanf("%d", &n);
+        while (getchar() != '\n');
+
+        if (aux != 1 || n < a || n > b)
+        {
+            printf("Error: valor ingresado incorrecto\n");
+            printf(">> ");
+        }
+    } while (aux != 1 || n < a || n > b);
+
+    return n;
+}
 
 
 
@@ -184,16 +138,29 @@ void registrarZona(Zona zonas[], int *cantidad)
 
     printf("\n===== REGISTRO DE ZONA =====\n");
 
-    ingresarTexto("Nombre de la zona: ", zonas[*cantidad].nombre);
+    printf("Nombre de la zona: ");
+    leerCadena(zonas[*cantidad].nombre, 50);
 
-    zonas[*cantidad].temperatura = ingresarFloat("Temperatura: ");
-    zonas[*cantidad].viento = ingresarFloat("Velocidad del viento: ");
-    zonas[*cantidad].humedad = ingresarFloat("Humedad: ");
+    printf("Temperatura: ");
+    zonas[*cantidad].temperatura = validarFloatRango(-56, 56);
 
-    zonas[*cantidad].co2 = ingresarFloat("CO2: ");
-    zonas[*cantidad].so2 = ingresarFloat("SO2: ");
-    zonas[*cantidad].no2 = ingresarFloat("NO2: ");
-    zonas[*cantidad].pm25 = ingresarFloat("PM2.5: ");
+    printf("Velocidad del viento: ");
+    zonas[*cantidad].viento = validarFloatRango(1, 999);
+
+    printf("Humedad: ");
+    zonas[*cantidad].humedad = validarFloatRango(1, 999);
+
+    printf("CO2: ");
+    zonas[*cantidad].co2 = validarFloatRango(1, 999);
+
+    printf("SO2: ");
+    zonas[*cantidad].so2 = validarFloatRango(1, 999);
+
+    printf("NO2: ");
+    zonas[*cantidad].no2 = validarFloatRango(1, 999);
+
+    printf("PM2.5: ");
+    zonas[*cantidad].pm25 = validarFloatRango(1, 999);
 
     zonas[*cantidad].promedio = 0;
     zonas[*cantidad].prediccion = 0;
@@ -217,23 +184,23 @@ void mostrarZonas(Zona zonas[], int cantidad)
     }
 
     printf("\n========== ZONAS ==========\n");
+    printf("%-3s %-20s %10s %10s %10s %10s %10s %10s %10s %15s\n",
+           "No", "Nombre", "Temperatura", "Viento", "Humedad", "CO2", "SO2", "NO2", "PM2.5", "ContActual");
+    printf("%-3s %-20s %10s %10s %10s %10s %10s %10s %10s %15s\n",
+           "--", "--------------------", "----------", "----------", "----------", "----------", "----------", "----------", "----------", "---------------");
 
     for(i = 0; i < cantidad; i++)
     {
-        printf("\nZona %d\n", i + 1);
-
-        printf("Nombre: %s\n", zonas[i].nombre);
-
-        printf("Temperatura: %.2f\n", zonas[i].temperatura);
-        printf("Viento: %.2f\n", zonas[i].viento);
-        printf("Humedad: %.2f\n", zonas[i].humedad);
-
-        printf("CO2: %.2f\n", zonas[i].co2);
-        printf("SO2: %.2f\n", zonas[i].so2);
-        printf("NO2: %.2f\n", zonas[i].no2);
-        printf("PM2.5: %.2f\n", zonas[i].pm25);
-
-        printf("Contaminacion Actual: %.2f\n",
+        printf("%-3d %-20s %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %15.2f\n",
+               i + 1,
+               zonas[i].nombre,
+               zonas[i].temperatura,
+               zonas[i].viento,
+               zonas[i].humedad,
+               zonas[i].co2,
+               zonas[i].so2,
+               zonas[i].no2,
+               zonas[i].pm25,
                calcularContaminacion(zonas[i]));
     }
 
@@ -267,12 +234,18 @@ void calcularPromedio(Zona zonas[], int cantidad)
         return;
     }
 
+    printf("\n====== PROMEDIO HISTORICO ======\n");
+    printf("Ingrese el promedio de los ultimos 30 dias por zona.\n");
+
     for(i = 0; i < cantidad; i++)
     {
-        zonas[i].promedio = calcularContaminacion(zonas[i]);
+        printf("\nZona %d: %s\n", i + 1, zonas[i].nombre);
+        printf("Contaminacion actual: %.2f\n", calcularContaminacion(zonas[i]));
+        printf("Promedio historico [0 a 999]: ");
+        zonas[i].promedio = validarFloatRango(0, 999);
     }
 
-    printf("\nPromedios calculados correctamente.\n");
+    printf("\nPromedios ingresados correctamente.\n");
 }
 
 
@@ -290,16 +263,31 @@ void calcularPrediccion(Zona zonas[], int cantidad)
 
     for(i = 0; i < cantidad; i++)
     {
+        if(zonas[i].promedio == 0)
+        {
+            printf("\nError: la zona '%s' no tiene promedio historico.\n", zonas[i].nombre);
+            printf("Ejecute primero la opcion 4.\n");
+            return;
+        }
+    }
+
+    printf("\n====== PREDICCION DE CONTAMINACION ======\n");
+
+    for(i = 0; i < cantidad; i++)
+    {
         zonas[i].prediccion =
         (calcularContaminacion(zonas[i]) * 0.70) +
         (zonas[i].promedio * 0.30);
+
+        printf("\nZona: %s\n", zonas[i].nombre);
+        printf("Contaminacion actual:  %.2f\n", calcularContaminacion(zonas[i]));
+        printf("Promedio historico:    %.2f\n", zonas[i].promedio);
+        printf("Prediccion (24 horas): %.2f\n", zonas[i].prediccion);
     }
 
     printf("\nPrediccion realizada correctamente.\n");
 }
-/*=========================
-    MOSTRAR ALERTAS
-=========================*/
+
 
 void mostrarAlertas(Zona zonas[], int cantidad)
 {
@@ -390,5 +378,7 @@ void recomendaciones(Zona zonas[], int cantidad)
             printf("- Evite cualquier exposicion al aire exterior.\n");
             printf("- Contacte a las autoridades sanitarias.\n");
         }
+    }
+}
     }
 }
