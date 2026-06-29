@@ -25,18 +25,15 @@ typedef struct
 
 
 
-int validarLetras(char texto[]);
-int validarNumero(char texto[]);
-
-void ingresarTexto(char mensaje[], char texto[]);
-float ingresarFloat(char mensaje[]);
+void leerCadena(char *cadena, int n);
+float validarFloatRango(float a, float b);
+int validarIntRango(int a, int b);
 
 
-
+/* ARCHIVOS */
 
 void guardarDatos(Zona zonas[], int cantidad);
 int cargarDatos(Zona zonas[]);
-
 
 
 
