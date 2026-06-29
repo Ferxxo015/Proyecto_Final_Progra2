@@ -255,9 +255,7 @@ float calcularContaminacion(Zona zona)
 }
 
 
-/*=========================
- CALCULAR PROMEDIO
-=========================*/
+
 
 void calcularPromedio(Zona zonas[], int cantidad)
 {
