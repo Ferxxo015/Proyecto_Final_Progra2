@@ -183,16 +183,18 @@ void mostrarZonas(Zona zonas[], int cantidad)
         return;
     }
 
-    printf("\n========== ZONAS ==========\n");
-    printf("%-3s %-20s %10s %10s %10s %10s %10s %10s %10s %15s\n",
-           "No", "Nombre", "Temperatura", "Viento", "Humedad", "CO2", "SO2", "NO2", "PM2.5", "ContActual");
-    printf("%-3s %-20s %10s %10s %10s %10s %10s %10s %10s %15s\n",
-           "--", "--------------------", "----------", "----------", "----------", "----------", "----------", "----------", "----------", "---------------");
+    printf("\n");
+    printf("%-20s %8s %8s %8s %8s %8s %8s %8s %12s %10s %10s\n",
+           "Zona", "Temp", "Viento", "Humedad",
+           "CO2", "SO2", "NO2", "PM2.5",
+           "Contam.Act", "Promedio", "Prediccion");
+
+    printf("%-20s %8s %8s %8s %8s %8s %8s %8s %12s %10s %10s\n",
+           
 
     for(i = 0; i < cantidad; i++)
     {
-        printf("%-3d %-20s %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %15.2f\n",
-               i + 1,
+        printf("%-20s %8.2f %8.2f %8.2f %8.2f %8.2f %8.2f %8.2f %12.2f",
                zonas[i].nombre,
                zonas[i].temperatura,
                zonas[i].viento,
@@ -202,8 +204,19 @@ void mostrarZonas(Zona zonas[], int cantidad)
                zonas[i].no2,
                zonas[i].pm25,
                calcularContaminacion(zonas[i]));
-    }
 
+        if(zonas[i].promedio > 0)
+            printf(" %10.2f", zonas[i].promedio);
+        else
+            printf(" %10s", "N/A");
+
+        if(zonas[i].prediccion > 0)
+            printf(" %10.2f", zonas[i].prediccion);
+        else
+            printf(" %10s", "N/A");
+
+        printf("\n");
+    }
 }
 
 
