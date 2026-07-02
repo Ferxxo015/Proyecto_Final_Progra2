@@ -1,3 +1,6 @@
+#ifndef FUNCIONES_H
+#define FUNCIONES_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,3 +60,9 @@ void recomendaciones(Zona zonas[], int cantidad);
 
 
 void menu();
+
+#endif 
+
+
+
+
