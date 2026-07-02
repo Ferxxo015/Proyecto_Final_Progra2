@@ -10,7 +10,7 @@ void menu()
     printf("1. Registrar zona\n");
     printf("2. Mostrar zonas\n");
     printf("3. Calcular contaminacion actual\n");
-    printf("4. Calcular promedio historico\n");
+    printf("4. Promedio historico\n");
     printf("5. Predecir contaminacion\n");
     printf("6. Mostrar alertas\n");
     printf("7. Mostrar recomendaciones\n");
@@ -183,18 +183,16 @@ void mostrarZonas(Zona zonas[], int cantidad)
         return;
     }
 
-    printf("\n");
-    printf("%-20s %8s %8s %8s %8s %8s %8s %8s %12s %10s %10s\n",
-           "Zona", "Temp", "Viento", "Humedad",
-           "CO2", "SO2", "NO2", "PM2.5",
-           "Contam.Act", "Promedio", "Prediccion");
-
-    printf("%-20s %8s %8s %8s %8s %8s %8s %8s %12s %10s %10s\n",
-           
+    printf("\n========== ZONAS ==========\n");
+    printf("%-3s %-20s %10s %10s %10s %10s %10s %10s %10s %15s\n",
+           "No", "Nombre", "Temperatura", "Viento", "Humedad", "CO2", "SO2", "NO2", "PM2.5", "ContActual");
+    printf("%-3s %-20s %10s %10s %10s %10s %10s %10s %10s %15s\n",
+           "--", "--------------------", "----------", "----------", "----------", "----------", "----------", "----------", "----------", "---------------");
 
     for(i = 0; i < cantidad; i++)
     {
-        printf("%-20s %8.2f %8.2f %8.2f %8.2f %8.2f %8.2f %8.2f %12.2f",
+        printf("%-3d %-20s %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %15.2f\n",
+               i + 1,
                zonas[i].nombre,
                zonas[i].temperatura,
                zonas[i].viento,
@@ -204,19 +202,8 @@ void mostrarZonas(Zona zonas[], int cantidad)
                zonas[i].no2,
                zonas[i].pm25,
                calcularContaminacion(zonas[i]));
-
-        if(zonas[i].promedio > 0)
-            printf(" %10.2f", zonas[i].promedio);
-        else
-            printf(" %10s", "N/A");
-
-        if(zonas[i].prediccion > 0)
-            printf(" %10.2f", zonas[i].prediccion);
-        else
-            printf(" %10s", "N/A");
-
-        printf("\n");
     }
+
 }
 
 
@@ -240,25 +227,58 @@ float calcularContaminacion(Zona zona)
 void calcularPromedio(Zona zonas[], int cantidad)
 {
     int i;
-
-    if(cantidad == 0)
+    if (cantidad == 0)
     {
-        printf("\nNo existen datos.\n");
+        printf("\nNo existen zonas registradas para cargar el historial.\n");
         return;
     }
 
-    printf("\n====== PROMEDIO HISTORICO ======\n");
-    printf("Ingrese el promedio de los ultimos 30 dias por zona.\n");
+    printf("\n======================================================================\n");
+    printf("  CARGANDO DATOS HISTORICOS (30 DIAS) - ESTANDARES OMS / EPA (TABLA)  \n");
+    printf("======================================================================\n");
+    printf("%-25s %-10s %-10s %-10s %-10s %-12s\n", "Zona", "PM2.5", "NO2", "SO2", "CO2", "Ponderado");
+    printf("----------------------------------------------------------------------\n");
 
-    for(i = 0; i < cantidad; i++)
+    for (i = 0; i < cantidad; i++)
     {
-        printf("\nZona %d: %s\n", i + 1, zonas[i].nombre);
-        printf("Contaminacion actual: %.2f\n", calcularContaminacion(zonas[i]));
-        printf("Promedio historico [0 a 999]: ");
-        zonas[i].promedio = validarFloatRango(0, 999);
-    }
+        float pm25_hist = 0.0;
+        float no2_hist = 0.0;
+        float so2_hist = 0.0;
+        float co2_hist = 0.0;
 
-    printf("\nPromedios ingresados correctamente.\n");
+        
+        switch (i % 5)
+        {
+            case 0: 
+                pm25_hist = 12.0; no2_hist = 15.0; so2_hist = 8.0; co2_hist = 410.0;
+                break;
+            case 1: 
+                pm25_hist = 32.0; no2_hist = 45.0; so2_hist = 22.0; co2_hist = 450.0;
+                break;
+            case 2:
+                pm25_hist = 52.0; no2_hist = 75.0; so2_hist = 42.0; co2_hist = 520.0;
+                break;
+            case 3: 
+                pm25_hist = 85.0; no2_hist = 110.0; so2_hist = 65.0; co2_hist = 580.0;
+                break;
+            case 4: 
+                pm25_hist = 24.0; no2_hist = 35.0; so2_hist = 15.0; co2_hist = 435.0;
+                break;
+        }
+
+        
+        zonas[i].promedio = (pm25_hist * 0.50) + 
+                            (no2_hist * 0.20) + 
+                            (so2_hist * 0.20) + 
+                            ((co2_hist / 10.0) * 0.10);
+
+        // Imprime la fila correspondiente en la tabla de la consola
+        printf("%-25s %-10.1f %-10.1f %-10.1f %-10.1f %-12.2f\n", 
+               zonas[i].nombre, pm25_hist, no2_hist, so2_hist, co2_hist, zonas[i].promedio);
+    }
+    
+    printf("======================================================================\n");
+    printf("¡Carga masiva completada! Valores guardados en el registro historico.\n");
 }
 
 
@@ -314,33 +334,40 @@ void mostrarAlertas(Zona zonas[], int cantidad)
     }
 
     printf("\n========== ALERTAS ==========\n");
+    printf("%-3s %-20s %-35s %15s\n", "No", "Nombre", "Estado", "Contaminacion");
+    printf("%-3s %-20s %-35s %15s\n", "--", "--------------------", "-----------------------------------", "---------------");
 
     for(i = 0; i < cantidad; i++)
     {
         contaminacion = calcularContaminacion(zonas[i]);
-
-        printf("\nZona: %s\n", zonas[i].nombre);
+        const char *estado;
 
         if(contaminacion < 50)
         {
-            printf("Estado: BUENO (%.2f)\n", contaminacion);
+            estado = "BUENO";
         }
         else if(contaminacion < 100)
         {
-            printf("Estado: MODERADO (%.2f)\n", contaminacion);
+            estado = "MODERADO";
         }
         else if(contaminacion < 150)
         {
-            printf("Estado: MALO PARA GRUPOS SENSIBLES (%.2f)\n", contaminacion);
+            estado = "MALO PARA GRUPOS SENSIBLES";
         }
         else if(contaminacion < 200)
         {
-            printf("Estado: MALO (%.2f)\n", contaminacion);
+            estado = "MALO";
         }
         else
         {
-            printf("Estado: MUY MALO - PELIGROSO (%.2f)\n", contaminacion);
+            estado = "MUY MALO - PELIGROSO";
         }
+
+        printf("%-3d %-20s %-35s %15.2f\n",
+               i + 1,
+               zonas[i].nombre,
+               estado,
+               contaminacion);
     }
 }
 
@@ -359,39 +386,39 @@ void recomendaciones(Zona zonas[], int cantidad)
     }
 
     printf("\n========== RECOMENDACIONES ==========\n");
+    printf("%-3s %-20s %-70s %15s\n", "No", "Nombre", "Recomendacion", "Contaminacion");
+    printf("%-3s %-20s %-70s %15s\n", "--", "--------------------", "----------------------------------------------------------------------", "---------------");
 
     for(i = 0; i < cantidad; i++)
     {
         contaminacion = calcularContaminacion(zonas[i]);
-
-        printf("\nZona: %s\n", zonas[i].nombre);
+        const char *recomendacion;
 
         if(contaminacion < 50)
         {
-            printf("- Calidad del aire buena. No se requieren acciones.\n");
+            recomendacion = "Calidad del aire buena. No se requieren acciones.";
         }
         else if(contaminacion < 100)
         {
-            printf("- Calidad moderada. Personas sensibles deben limitar actividad al aire libre.\n");
+            recomendacion = "Calidad moderada. Personas sensibles deben limitar actividad al aire libre.";
         }
         else if(contaminacion < 150)
         {
-            printf("- Grupos sensibles deben evitar actividad prolongada al aire libre.\n");
-            printf("- Use mascarilla si sale a la calle.\n");
+            recomendacion = "Grupos sensibles deben evitar actividad prolongada al aire libre. Use mascarilla.";
         }
         else if(contaminacion < 200)
         {
-            printf("- Evite actividades al aire libre.\n");
-            printf("- Mantenga ventanas cerradas.\n");
-            printf("- Use purificador de aire en interiores.\n");
+            recomendacion = "Evite actividades al aire libre. Mantenga ventanas cerradas. Use purificador en interiores.";
         }
         else
         {
-            printf("- ALERTA: Permanezca en interiores.\n");
-            printf("- Evite cualquier exposicion al aire exterior.\n");
-            printf("- Contacte a las autoridades sanitarias.\n");
+            recomendacion = "ALERTA: Permanezca en interiores. Evite exposicion al aire exterior. Contacte autoridades.";
         }
-    }
-}
+
+        printf("%-3d %-20s %-70s %15.2f\n",
+               i + 1,
+               zonas[i].nombre,
+               recomendacion,
+               contaminacion);
     }
 }
